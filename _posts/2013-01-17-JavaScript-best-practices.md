@@ -10,13 +10,13 @@ Call things by their name — easy, short and readable variable and function nam
 
 bad:
 
-var x1, x2;
+    var x1, x2;
 
-var incrementorForMainLoopWhichSpansFromTenToTwenty;
+    var incrementorForMainLoopWhichSpansFromTenToTwenty;
 
 good:
 
-function isLegalDrinkingAge()
+    function isLegalDrinkingAge()
 
 匈牙利命名法(Hungarian notation)，可以方便地知道变量的类型:
 
@@ -36,29 +36,29 @@ bIsLegal: 布尔
 
 bad:
 
-  var current = null;
+    var current = null;
 
-  function init(){…};
+    function init(){…};
 
-  function change(){…};
+    function change(){…};
 
-  function verify(){…};
+    function verify(){…};
 
 
 
 1.定义成一个对象：
 
-  var myNameSpace = {
-  
-       current: null,
-  
-       init: function(){…},
-  
-       change: function(){…},
-  
-       verify: function(){...}
-  
-  };
+    var myNameSpace = {
+    
+         current: null,
+    
+         init: function(){…},
+    
+         change: function(){…},
+    
+         verify: function(){...}
+    
+    };
 
 缺点：每一个需要调用的地方，都要带上对象的名字。比如：
 
@@ -66,52 +66,52 @@ bad:
 
 2.通过一个匿名方法包裹(模块模式):
 
-  myNameSpace = function(){
-  
-    var current = null;
-  
-    function init(){…}
-  
-    function change(){…}
-  
-    function verify(){…}
-  
-  }();
+    myNameSpace = function(){
+    
+      var current = null;
+    
+      function init(){…}
+    
+      function change(){…}
+    
+      function verify(){…}
+    
+    }();
 
 缺点：外部不能访问。如果给外部提供调用，就要将特定的内容return出去:
 
 3.
 
-  myNameSpace = function(){
-    var current = null;
-    function verify(){…}
-    return{
-      init:function(){…}
-      change:function(){…}
-    }
-  }();
+    myNameSpace = function(){
+      var current = null;
+      function verify(){…}
+      return{
+        init:function(){…}
+        change:function(){…}
+      }
+    }();
 
 4.最佳实践：
 
-  myNameSpace = function(){
-  
-    var current = null;
-  
-    function init(){…}
-  
-    function change(){…}
-  
-    function verify(){…}
-  
-    return{
-  
-      init:init,
-  
-      change:change
-  
-    }
-  
-  }();
+    myNameSpace = function(){
+    
+      var current = null;
+    
+      function init(){…}
+    
+      function change(){…}
+    
+      function verify(){…}
+    
+      return{
+    
+        init:init,
+    
+        change:change
+    
+      }
+    
+    }();
 
 不直接返回变量或方法，而是返回指向它们的指针。这样的话，不非得通过myNameSpace来访问其中的变量和方法。
 
@@ -119,25 +119,25 @@ bad:
 
 5.如果不想暴露任何信息到外部，直接包起来即可：
 
-  function(){
-  
-    var current = null;
-  
-    function init(){…}
-  
-    function change(){…}
-  
-    function verify(){…}
-  
-    return{
-  
-      init:init,
-  
-      change:change
-  
-    }
-  
-  }();
+    function(){
+    
+      var current = null;
+    
+      function init(){…}
+    
+      function change(){…}
+    
+      function verify(){…}
+    
+      return{
+    
+        init:init,
+    
+        change:change
+    
+      }
+    
+    }();
 
 # 三.坚持严格的编码风格
 
@@ -153,17 +153,17 @@ JSLint
 
 来打开或关闭代码块：
 
-  /*
-  function init() {
-  }
-  // */
+    /*
+    function init() {
+    }
+    // */
 
 打开代码块：
 
-  // /*
-  function init() {
-  }
-  // */
+    // /*
+    function init() {
+    }
+    // */
 
 # 五.避免混用其他技术
 
@@ -171,61 +171,62 @@ JSLint
 
 # 六.适当的时候使用快捷符号(shortcut notation):
 
-  var cow = new Object();
-  
-  cow.colour = 'brown';
-  
-  cow.commonQuestion = 'What now?';
-  
-  cow.moo = function(){
-  
-    console.log('moo');
-  
-  }
-  
-  cow.feet = 4;
-  
-  cow.accordingToLarson = 'will take over the world';
+    var cow = new Object();
+    
+    cow.colour = 'brown';
+    
+    cow.commonQuestion = 'What now?';
+    
+    cow.moo = function(){
+    
+      console.log('moo');
+    
+    }
+    
+    cow.feet = 4;
+    
+    cow.accordingToLarson = 'will take over the world';
 ==>
-  var cow = {
-  
-    colour:'brown',
-  
-    commonQuestion:'What now?',
-  
-    moo:function(){
-  
-      console.log('moo);
-  
-    },
-  
-    feet:4,
-  
-    accordingToLarson:'will take over the world'
-  
-  };
+    var cow = {
+    
+      colour:'brown',
+    
+      commonQuestion:'What now?',
+    
+      moo:function(){
+    
+        console.log('moo);
+    
+      },
+    
+      feet:4,
+    
+      accordingToLarson:'will take over the world'
+    
+    };
 
 数组：
 
-  var aweSomeBands = new Array();
-  
-  aweSomeBands[0] = 'Bad Religion';
-  
-  aweSomeBands[1] = 'Dropkick Murphys';
+    var aweSomeBands = new Array();
+    
+    aweSomeBands[0] = 'Bad Religion';
+    
+    aweSomeBands[1] = 'Dropkick Murphys';
 
 ==>
-  var aweSomeBands = [
-    'Bad Religion',
-    'Dropkick Murphys'
-  ];
+
+    var aweSomeBands = [
+      'Bad Religion',
+      'Dropkick Murphys'
+    ];
 
 条件判断使用三目运算符：
 
-  var a = (x ? 100) ? 1 : -1;
+    var a = (x ? 100) ? 1 : -1;
 
 赋值：
 
-  var x = v || 10;
+    var x = v || 10;
 
 当v不存在值，把x设为 10。
 
@@ -251,11 +252,11 @@ JSLint
 
 bad:
 
-  for(var i = 0; i < arr.length; i++) {…}
+    for(var i = 0; i < arr.length; i++) {…}
 
 good:
 
-  for(var i = 0, iMax = arr.length; i < iMax; i++) {…}
+    for(var i = 0, iMax = arr.length; i < iMax; i++) {…}
 
 
 
