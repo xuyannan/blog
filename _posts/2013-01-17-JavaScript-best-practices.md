@@ -169,7 +169,8 @@ JSLint
 
 比如在js里面直接对元素的样式值(类似 color, font-size)进行修改，而是通过操作元素的class值来实现。
 
-# 六.适当的时候使用快捷符号(shortcut notation):
+# 六.适当的时候使用快捷符号(shortcut notation): #
+
 
     var cow = new Object();
     
@@ -186,7 +187,9 @@ JSLint
     cow.feet = 4;
     
     cow.accordingToLarson = 'will take over the world';
+
 ==>
+
     var cow = {
     
       colour:'brown',
