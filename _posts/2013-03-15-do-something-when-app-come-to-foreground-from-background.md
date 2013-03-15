@@ -3,7 +3,7 @@ layout: default
 title: 监听APP从后台(background)切换到前台(foreground) 
 ---
 
-==监听APP从后台(background)切换到前台(foreground)== 
+##监听APP从后台(background)切换到前台(foreground)## 
 
 在`AppDelegate.m`中的`- (void)applicationWillEnterForeground:(UIApplication *)application;`方法在APP即将转到foreground时会被调用。
 
