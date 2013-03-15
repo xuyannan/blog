@@ -12,12 +12,12 @@ title: 监听APP从后台(background)切换到前台(foreground)
     -(void)viewWillAppear:(BOOL)animated;
 
 方法里添加对这一事件的监听：
-
+{% highlight ruby %}
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(appWillEnterForegroundNotification)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
-
+{% endhighlight %}
 `appWillEnterForegroundNotification`即要调用的方法。
 
 最后在`UIViewController`的`-(void)viewWillDisappear:(BOOL)animated`中要移除这个`observer`
