@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Blog by xuyannan</title>
+    <link rel="stylesheet" href="/blog/stylesheets/styles.css">
+    <link rel="stylesheet" href="/blog/stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/blog/javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>xuyannan's Blog</h1>
+        <p>host on Github</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/xuyannan/blog" class="button fork"><strong>View On GitHub</strong></a>
+        <a href="/blog" class="button fork" style="margin-left:-190px"><strong>Home</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/xuyannan/blog/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/xuyannan/blog/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h2 id="appbackgroundforeground">监听APP从后台(background)切换到前台(foreground)</h2>
+
+<p>在<code>AppDelegate.m</code>中的<code>- (void)applicationWillEnterForeground:(UIApplication *)application;</code>方法在APP即将转到foreground时会被调用。</p>
+
+<p>具体的<code>UIViewController</code>中，可以在</p>
+
+<pre><code>-(void)viewWillAppear:(BOOL)animated;
+</code></pre>
+
+<p>方法里添加对这一事件的监听：</p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] addObserver:self
+                                         selector:@selector(appWillEnterForegroundNotification)
+                                             name:UIApplicationWillEnterForegroundNotification
+                                           object:nil];
+</code></pre>
+
+<p><code>appWillEnterForegroundNotification</code>即要调用的方法。</p>
+
+<p>最后在<code>UIViewController</code>的<code>-(void)viewWillDisappear:(BOOL)animated</code>中要移除这个<code>observer</code></p>
+
+<pre><code>[[NSNotificationCenter defaultCenter] removeObserver:self];
+</code></pre>
+
+        <!--start of disqus-->
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'xuyannan'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        <!--end of disqus-->
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/xuyannan">xuyannan</a>
+          <style>
+            .ig-b- { display: inline-block; }
+            .ig-b- img { visibility: hidden; }
+            .ig-b-:hover { background-position: 0 -60px; } .ig-b-:active { background-position: 0 -120px; }
+            .ig-b-16 { width: 16px; height: 16px; background: url(//badges.instagram.com/static/images/ig-badge-sprite-16.png) no-repeat 0 0; }
+            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+            .ig-b-16 { background-image: url(//badges.instagram.com/static/images/ig-badge-sprite-16@2x.png); background-size: 60px 178px; } }
+          </style>
+          <a href="http://instagram.com/xyn0563?ref=badge" class="ig-b- ig-b-16" target="_blank"><img src="//badges.instagram.com/static/images/ig-badge-16.png" alt="Instagram" /></a>
+        </p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

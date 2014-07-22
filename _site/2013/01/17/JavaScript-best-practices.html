@@ -1,0 +1,376 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Blog by xuyannan</title>
+    <link rel="stylesheet" href="/blog/stylesheets/styles.css">
+    <link rel="stylesheet" href="/blog/stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/blog/javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>xuyannan's Blog</h1>
+        <p>host on Github</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/xuyannan/blog" class="button fork"><strong>View On GitHub</strong></a>
+        <a href="/blog" class="button fork" style="margin-left:-190px"><strong>Home</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/xuyannan/blog/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/xuyannan/blog/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <p>http://www.w3.org/wiki/JavaScript_best_practices</p>
+
+<h1 id="javascript">Javascript最佳实践</h1>
+
+<h2 id="section">一.变量命名：简短且有意义的变量名和方法名</h2>
+
+<p>Call things by their name — easy, short and readable variable and function names</p>
+
+<p>bad:</p>
+
+<pre><code>var x1, x2;
+
+var incrementorForMainLoopWhichSpansFromTenToTwenty;
+</code></pre>
+
+<p>good:</p>
+
+<pre><code>function isLegalDrinkingAge()
+</code></pre>
+
+<p>匈牙利命名法(Hungarian notation)，可以方便地知道变量的类型:</p>
+
+<p>sFamilyName: 字符串</p>
+
+<p>oMember: 对象</p>
+
+<p>bIsLegal: 布尔</p>
+
+<p>使用英语。</p>
+
+<p>让你的代码讲故事，让别人像读故事一样读懂你的代码。</p>
+
+<h2 id="section-1">二.避免使用全局变量</h2>
+
+<p>原因显而易见，那如何避免呢？</p>
+
+<p>bad:</p>
+
+<pre><code>var current = null;
+
+function init(){…};
+
+function change(){…};
+
+function verify(){…};
+</code></pre>
+
+<p>1.定义成一个对象：</p>
+
+<pre><code>var myNameSpace = {
+
+     current: null,
+
+     init: function(){…},
+
+     change: function(){…},
+
+     verify: function(){...}
+
+};
+</code></pre>
+
+<p>缺点：每一个需要调用的地方，都要带上对象的名字。比如：</p>
+
+<p>myNameSpace.init();</p>
+
+<p>2.通过一个匿名方法包裹(模块模式):</p>
+
+<pre><code>myNameSpace = function(){
+
+  var current = null;
+
+  function init(){…}
+
+  function change(){…}
+
+  function verify(){…}
+
+}();
+</code></pre>
+
+<p>缺点：外部不能访问。如果给外部提供调用，就要将特定的内容return出去:</p>
+
+<p>3.</p>
+
+<pre><code>myNameSpace = function(){
+  var current = null;
+  function verify(){…}
+  return{
+    init:function(){…}
+    change:function(){…}
+  }
+}();
+</code></pre>
+
+<p>4.最佳实践：</p>
+
+<pre><code>myNameSpace = function(){
+
+  var current = null;
+
+  function init(){…}
+
+  function change(){…}
+
+  function verify(){…}
+
+  return{
+
+    init:init,
+
+    change:change
+
+  }
+
+}();
+</code></pre>
+
+<p>不直接返回变量或方法，而是返回指向它们的指针。这样的话，不非得通过myNameSpace来访问其中的变量和方法。</p>
+
+<p>另外，可以以另外的名字(更为简短的)来返回，如return {set: change};</p>
+
+<p>5.如果不想暴露任何信息到外部，直接包起来即可：</p>
+
+<pre><code>function(){
+
+  var current = null;
+
+  function init(){…}
+
+  function change(){…}
+
+  function verify(){…}
+
+  return{
+
+    init:init,
+
+    change:change
+
+  }
+
+}();
+</code></pre>
+
+<h2 id="section-2">三.坚持严格的编码风格</h2>
+
+<p>浏览器对于js很是宽容，但这不表明你就可以随意写。</p>
+
+<p>JSLint</p>
+
+<h2 id="section-3">四.注释是必要的，但不能过度</h2>
+
+<p>单行注释(//)，如果只是通过删除空格空行压缩的话，会出问题。</p>
+
+<p>对于多行注释的一个技巧：在注释结束符之前写两个反杠(//)，这样可以通过在注释开始符前增加或删除 //</p>
+
+<p>来打开或关闭代码块：</p>
+
+<pre><code>/*
+function init() {
+}
+// */
+</code></pre>
+
+<p>打开代码块：</p>
+
+<pre><code>// /*
+function init() {
+}
+// */
+</code></pre>
+
+<h2 id="section-4">五.避免混用其他技术</h2>
+
+<p>比如在js里面直接对元素的样式值(类似 color, font-size)进行修改，而是通过操作元素的class值来实现。</p>
+
+<h2 id="shortcut-notation">六.适当的时候使用快捷符号(shortcut notation):</h2>
+
+<pre><code>var cow = new Object();
+
+cow.colour = 'brown';
+
+cow.commonQuestion = 'What now?';
+
+cow.moo = function(){
+
+  console.log('moo');
+
+}
+
+cow.feet = 4;
+
+cow.accordingToLarson = 'will take over the world';
+</code></pre>
+
+<p>==&gt;</p>
+
+<pre><code>var cow = {
+
+  colour:'brown',
+
+  commonQuestion:'What now?',
+
+  moo:function(){
+
+    console.log('moo);
+
+  },
+
+  feet:4,
+
+  accordingToLarson:'will take over the world'
+
+};
+</code></pre>
+
+<p>数组：</p>
+
+<pre><code>var aweSomeBands = new Array();
+
+aweSomeBands[0] = 'Bad Religion';
+
+aweSomeBands[1] = 'Dropkick Murphys';
+</code></pre>
+
+<p>==&gt;</p>
+
+<pre><code>var aweSomeBands = [
+  'Bad Religion',
+  'Dropkick Murphys'
+];
+</code></pre>
+
+<p>条件判断使用三目运算符：</p>
+
+<pre><code>var a = (x ? 100) ? 1 : -1;
+</code></pre>
+
+<p>赋值：</p>
+
+<pre><code>var x = v || 10;
+</code></pre>
+
+<p>当v不存在值，把x设为 10。</p>
+
+<h2 id="section-5">七.模块化，一个方法只完成一件事</h2>
+
+<p>保持函数功能的单一也方便其他人维护。</p>
+
+<p>对于方法，要有输入，有输出，而不是把功能都方在方法内部。</p>
+
+<h2 id="enhance-progressively">八.Enhance progressively，逐步提高</h2>
+
+<p>在浏览器禁用javascript的情况下，保证主要功能可用。</p>
+
+<h2 id="section-6">九.提供可变配置</h2>
+
+<h2 id="section-7">十.避免过深的嵌套</h2>
+
+<h2 id="section-8">十一.优化循环</h2>
+
+<p>bad:</p>
+
+<pre><code>for(var i = 0; i &lt; arr.length; i++) {…}
+</code></pre>
+
+<p>good:</p>
+
+<pre><code>for(var i = 0, iMax = arr.length; i &lt; iMax; i++) {…}
+</code></pre>
+
+<h2 id="dom">十二.尽量少地操作DOM元素</h2>
+
+<h2 id="section-9">十三.提高代码的兼容性</h2>
+
+<p>不要只针对某个浏览器或某个版本进编码，尽量使编码标准代码。如果必须这样做，将文件单独放起来，</p>
+
+<p>并以浏览器名称及版本号命名。</p>
+
+<h2 id="section-10">十四.不要相信任何数据</h2>
+
+<p>对于数据，在处理之前要多加验证。</p>
+
+<h2 id="javascript-1">十五.用javascript来增加功能，而不是过多得创建内容</h2>
+
+<p>bad:</p>
+
+<p>在javascript代码中掺杂了大量的html</p>
+
+<p>good:</p>
+
+<p>加载模板创建html内容</p>
+
+<h2 id="section-11">十六.站在巨人的臂膀上</h2>
+
+<p>选择一个适合自己项目的js库。尽量不要同时使用多个库</p>
+
+        <!--start of disqus-->
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'xuyannan'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        <!--end of disqus-->
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/xuyannan">xuyannan</a>
+          <style>
+            .ig-b- { display: inline-block; }
+            .ig-b- img { visibility: hidden; }
+            .ig-b-:hover { background-position: 0 -60px; } .ig-b-:active { background-position: 0 -120px; }
+            .ig-b-16 { width: 16px; height: 16px; background: url(//badges.instagram.com/static/images/ig-badge-sprite-16.png) no-repeat 0 0; }
+            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+            .ig-b-16 { background-image: url(//badges.instagram.com/static/images/ig-badge-sprite-16@2x.png); background-size: 60px 178px; } }
+          </style>
+          <a href="http://instagram.com/xyn0563?ref=badge" class="ig-b- ig-b-16" target="_blank"><img src="//badges.instagram.com/static/images/ig-badge-16.png" alt="Instagram" /></a>
+        </p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>

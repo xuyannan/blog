@@ -1,0 +1,294 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Blog by xuyannan</title>
+    <link rel="stylesheet" href="/blog/stylesheets/styles.css">
+    <link rel="stylesheet" href="/blog/stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="/blog/javascripts/main.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+
+      <header>
+        <h1>xuyannan's Blog</h1>
+        <p>host on Github</p>
+      </header>
+
+      <div id="banner">
+        <span id="logo"></span>
+
+        <a href="https://github.com/xuyannan/blog" class="button fork"><strong>View On GitHub</strong></a>
+        <a href="/blog" class="button fork" style="margin-left:-190px"><strong>Home</strong></a>
+        <div class="downloads">
+          <span>Downloads:</span>
+          <ul>
+            <li><a href="https://github.com/xuyannan/blog/zipball/master" class="button">ZIP</a></li>
+            <li><a href="https://github.com/xuyannan/blog/tarball/master" class="button">TAR</a></li>
+          </ul>
+        </div>
+      </div><!-- end banner -->
+
+    <div class="wrapper">
+      <nav>
+        <ul></ul>
+      </nav>
+      <section>
+        <h1 id="mixpayandroidsdk">一、聚易付移动支付服务(MixpayAndroidSDK)简介</h1>
+
+<p>聚易付移动支付服务(MixpayAndroidSDK)的目标就是使开发者很轻松地在自己的APP中集成支付功能，从而节约时间和精力用在本身的业务当中。</p>
+
+<p>只需15分钟，就可以让你的APP具有支付宝支付、银行卡支付、手机充值卡支付和游戏点卡支付。解决了之前开发者在集成支付时遇到的各种问题，比如：</p>
+
+<ul>
+  <li>与支付平台签约时间过长</li>
+  <li>支付平台文档坑太多，导到开发过程很不顺畅</li>
+  <li>支付平台技术支持不足，联调困难</li>
+  <li>每一个支付通道都要折腾一翻</li>
+</ul>
+
+<p>MixpayAndroidSDK致力于帮助开发者解决以上问题。</p>
+
+<p>以下通过一个实际项目来说明如何使用MixpayAndroidSDK。</p>
+
+<p>笔者的开发环境：</p>
+
+<ul>
+  <li>Macbook Pro 10.9.4</li>
+  <li>Android Studio v0.8.2</li>
+  <li>Gradle 1.10</li>
+  <li>JDK 1.7</li>
+</ul>
+
+<h1 id="app">二、注册、添加APP</h1>
+
+<h2 id="section">2.1 注册</h2>
+
+<p>注册地址：https://m.mixpay.cn/register</p>
+
+<p>注册成功之后会收到Mixpay发出的一封确认邮件，点击其中的确认链接即完成注册过程。</p>
+
+<h2 id="app-1">2.2 添加APP</h2>
+
+<p>登录到商户后台，通过菜单导航到 应用-&gt;新建应用 页面 </p>
+
+<p>https://m.mixpay.cn/application/add</p>
+
+<p>在表单中填写应用的相关信息，保存即可。如下图所示：</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGL" alt="添加APP" /></p>
+
+<p>其中的”通知地址”是指，Mixpay在完成一笔支付之后，通过这个地址通知给您，您在接收到进行相应的处理，并返回一个字符串’success’以表示接收成功，整个支付过程也就完成了。</p>
+
+<p>APP保存之后，Mixpay会位APP分配一个唯一标识，即APP_KEY，可以在 APP详情页面中看到：</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGO" alt="APP详情" /></p>
+
+<h2 id="section-1">2.3 添加密钥</h2>
+
+<p>操作地址：https://m.mixpay.cn/key/add
+密钥用来对订单信息进行加密。Mixpay支付两种加密方式，RSA和MD5。
+使用RSA，按页面上给出的提示操作即可。
+使用MD5，直接保存即可。在密钥详细信息中会看到secretKey。</p>
+
+<p>在这里选择MD5加密方式：</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGP" alt="添加密钥" /></p>
+
+<p>key信息：</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGQ" alt="密钥详情" /></p>
+
+<h2 id="app-2">2.4 将密钥绑定至APP</h2>
+
+<p>操作地址：https://m.mixpay.cn/key
+在key的右边点击”加载到应用”，在打开的页面中选择刚才新建的APP即可。</p>
+
+<h1 id="app-3">三、APP代码集成</h1>
+
+<h2 id="mixpayandroidsdk-1">3.1 添加MixpayAndroidSDK的依赖</h2>
+
+<p>可以通过gradle、maven、jar包三种方式添加依赖，开发者可以根据自身情况任选。这里选择<code>Gradle</code>，在build.gradle中添加以下配置：</p>
+
+<p><code>
+apply plugin: 'maven'
+repositories {
+    maven {
+        url 'https://maven.mixpay.cn'
+    }
+}
+...
+dependencies {
+    compile ('cn.mixpay:android-sdk:1.0.+'){
+        exclude group: 'com.google.android', module: 'android'
+    }
+}
+</code></p>
+
+<h2 id="section-2">3.2 初始化订单</h2>
+
+<p>引入MixpayAdroidSDK后，即可通过<code>cn.mixpay.Order</code>来表示自己的订单：</p>
+
+<p>```
+import cn.mixpay.sdk.*;
+…</p>
+
+<p>public static final String MD5_SECRET_KEY = “568bd43af00128ee4d1bce2679<strong>**<em>”;
+private static final String APP_KEY = “60186724345</em></strong>**”;
+Order myOrder = null;</p>
+
+<p>//订单信息
+String orderId = “order_id_001”;
+String userId = “user_id_001”;
+int amount = 1;
+String orderTitle = “瑜伽垫十个”;
+String orderDesc = “国际健美协会10:00下单”;
+String productId = “product_id_001”;
+//初始化订单界面，此处略去代码
+//签名
+String sign = cn.mixpay.server.MD5SignatureTool.signOrderInfo(amount, APP_KEY, “”, orderId, “”, orderDesc, orderTitle, “”, productId, “”, userId
+        , MD5_SECRET_KEY);</p>
+
+<p>myOrder = new Order(orderId, userId, amount, orderTitle, orderDesc, productId, sign);
+```</p>
+
+<p>其中的参数依次表示：</p>
+
+<p>订单编码、用户编码、金额(单位是分)、订单标题、订单描述、商品编码、订单签名</p>
+
+<h2 id="section-3">3.3 支付</h2>
+
+<p>初始化一个<code>cn.mixpay.MixpayAPI</code>对象，这个对象里提供了具体的支付方法：</p>
+
+<p><code>
+public void pay(View view) {
+    MixpayAPI api = new MixpayAPI(this, APP_KEY);
+    api.startPay(this, myOrder);
+}
+</code></p>
+
+<p>其中<code>this</code>表示当前的Activity，<code>APP_KEY</code>是在步骤2.2中得到的应用唯一标识，<code>myOrder</code>就是刚刚生成的订单。</p>
+
+<p>将<code>pay</code>方法绑定给页面上的支付按钮，在点击按钮时，MixpayAndroidSDK会做以下工作：</p>
+
+<ul>
+  <li>检测当前环境中是否安装了Mixpay支付插件</li>
+  <li>没有的话会提示用户安装</li>
+  <li>若有更新的Mixpay支付插件，提示用户升级</li>
+  <li>打开支付界面引导用户选择支付方式并完成支付</li>
+</ul>
+
+<p>订单界面：</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGS" alt="订单" /></p>
+
+<p>支付界面:</p>
+
+<p><img src="http://segmentfault.com/img/bVcJGT" alt="支付" /></p>
+
+<h2 id="section-4">3.4 支付结果处理</h2>
+
+<p>通过onActivityResult获得支付结果。MixpayAPI中定义了关于支付结果的各种状态：</p>
+
+<p>```
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MixpayAPI.REQUEST_CODE_START_PAY) {
+            Long mixpayOrderId = null;
+            try {
+                mixpayOrderId = data.getLongExtra(MixpayAPI.GET_MIXPAY_ORDER_ID, 0);
+            }catch (Exception e) {
+                //mixpayOrderId = new Long(0);
+                Log.e(TAG, “no order is returned”);
+            }
+            switch (resultCode) {
+                case MixpayAPI.ORDER_STATUS_PAY_SUCCESS:
+                    //TODO:支付成功，继续程序逻辑
+                    Toast.makeText(this, “支付成功”), Toast.LENGTH_LONG).show();
+                    break;
+                case MixpayAPI.ORDER_STATUS_UNPAY:
+                    …
+                    break;
+                case MixpayAPI.ORDER_STATUS_PAYING:
+                    …
+                    break;
+                case MixpayAPI.ORDER_STATUS_CANCELED:
+                    …
+                    break;
+                case MixpayAPI.ORDER_STATUS_PAY_FAILURE:
+					…
+                    break;
+                case MixpayAPI.ORDER_STATUS_UNKNOWN:
+					…
+                    break;
+            }</p>
+
+<pre><code>    }
+
+} ```
+</code></pre>
+
+<p>至此，支付功能集成完毕。</p>
+
+<h1 id="section-5">四、更多内容</h1>
+
+<h2 id="section-6">4.1 关于订单签名</h2>
+
+<p>Mixpay提供的帮助文档中详细说明了如何对订单信息进行签名，同时也提供了<code>java</code>、<code>PHP</code>、<code>Ruby</code>、<code>Python</code>、<code>NodeJS</code>五种语言的示例，可以直接拿来用。</p>
+
+<p>其中对于java还提供了服务器端的sdk，提供了方便的订单签名方法。具体请参考这里：https://www.mixpay.cn/docs/v1/server/java/</p>
+
+<p>在这个示例中，我直接在APP项目里引入这个服务器端sdk。</p>
+
+<h2 id="section-7">4.2 相关链接</h2>
+
+<p><a href="https://www.mixpay.cn/docs/v1/android/">Mixpay Android SDK 使用帮助</a></p>
+
+<p><a href="https://www.mixpay.cn/docs/v1/server/java/">Mixpay Server SDK For JAVA</a></p>
+
+<p><a href="https://github.com/mixpay">Mixpay on Github</a></p>
+
+
+        <!--start of disqus-->
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+            /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+            var disqus_shortname = 'xuyannan'; // required: replace example with your forum shortname
+
+            /* * * DON'T EDIT BELOW THIS LINE * * */
+            (function() {
+                var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+            })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+        <!--end of disqus-->
+      </section>
+      <footer>
+        <p>Project maintained by <a href="https://github.com/xuyannan">xuyannan</a>
+          <style>
+            .ig-b- { display: inline-block; }
+            .ig-b- img { visibility: hidden; }
+            .ig-b-:hover { background-position: 0 -60px; } .ig-b-:active { background-position: 0 -120px; }
+            .ig-b-16 { width: 16px; height: 16px; background: url(//badges.instagram.com/static/images/ig-badge-sprite-16.png) no-repeat 0 0; }
+            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 2 / 1), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+            .ig-b-16 { background-image: url(//badges.instagram.com/static/images/ig-badge-sprite-16@2x.png); background-size: 60px 178px; } }
+          </style>
+          <a href="http://instagram.com/xyn0563?ref=badge" class="ig-b- ig-b-16" target="_blank"><img src="//badges.instagram.com/static/images/ig-badge-16.png" alt="Instagram" /></a>
+        </p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
