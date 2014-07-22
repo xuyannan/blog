@@ -2,6 +2,7 @@
 layout: default
 title: 实战：使用 MixpayAndroidSDK快速集成移动支付功能
 ---
+
 # 一、聚易付移动支付服务(MixpayAndroidSDK)简介
 
 聚易付移动支付服务(MixpayAndroidSDK)的目标就是使开发者很轻松地在自己的APP中集成支付功能，从而节约时间和精力用在本身的业务当中。
